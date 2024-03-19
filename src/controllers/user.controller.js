@@ -21,7 +21,7 @@ const registerUser = asyncHandler(async (req,res) => {
 
 
     //checking if user already exits
-  const existedUser = User.findOne({
+  const existedUser = await User.findOne({
      $or:[ {username},  {email}]
    })
 
@@ -33,10 +33,13 @@ const registerUser = asyncHandler(async (req,res) => {
 
    //geting files from multer middleware
 
-   console.log(req.files)
+   
    const avatarLocalPath = req.files?.avatar[0]?.path
-   const coverImageLocalPath = req.files?.coverImage[0]?.path
-   console.log(avatarLocalPath, coverImageLocalPath)
+     let coverImageLocalPath;
+    if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
+        coverImageLocalPath = req.files.coverImage[0].path
+    }
+    
 
 
  // checking if avatar file is uploaded
@@ -72,12 +75,13 @@ const user = await User.create({
 
 
  //checking if user created successfully
-
  const createdUser = await User.findById(user._id).select(
     "-password -refreshToken"
- )
+)
 
- if(createdUser){
+//this will return user data if user is founded if not then
+
+ if(!createdUser){
     throw new ApiError(500, "Something went wrong while registering the user")
  }
 
