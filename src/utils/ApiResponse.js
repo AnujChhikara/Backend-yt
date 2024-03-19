@@ -8,6 +8,4 @@ class ApiResponse {
     }
 }
 
-const error = new ApiResponse(404, 'data' , 'fail')
-
-console.log(error)
+export {ApiResponse}
