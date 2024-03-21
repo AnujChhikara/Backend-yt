@@ -5,6 +5,8 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken"
 
+
+//function fro generating access and refresh token
 const generateAccessAndRefreshTokens = async(userId) => {
  try {
 
@@ -258,5 +260,11 @@ const refreshAccessToken = asyncHandler(async(req,res)=>{
    throw new ApiError(401,error?.message || "Invalid refresh token")
   }
 })
+
+//updating user details
+
+
+
+
 
 export {registerUser, loginUser, logOutUser, refreshAccessToken}
