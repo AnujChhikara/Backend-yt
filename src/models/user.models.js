@@ -52,13 +52,13 @@ userSchema.pre("save", async function(next) {
     if(!this.isModified('password')) return next() //checkiing if passowrd is not modified if not then simply return 
 
 // if password is modified then below code will run 
-    this.password = await bcrypt.hash(this.password, 10)
+    this.password =  bcrypt.hash(this.password, 10)
     next()
 
 })
 
-userSchema.methods.isPasswordCorrect = async function(passowrd) {
-  return await bcrypt.compare(passowrd, this.passowrd)
+userSchema.methods.isPasswordCorrect = async function(password){
+    return await bcrypt.compare(password, this.password)
 }
 
 userSchema.methods.generateAccessToken = function() {

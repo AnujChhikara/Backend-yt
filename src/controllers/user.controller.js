@@ -126,10 +126,11 @@ const user = await User.create({
 const loginUser = asyncHandler(async(req,res)=>{
  
    //getting user login data from request body
+   
    const {email, username, password} = req.body
 
    //checking if user not entered email and username both
-   if(!email || !username){
+   if(!email && !username){
       throw new ApiError(400, "username or email is required")
    }
     
@@ -148,7 +149,7 @@ const loginUser = asyncHandler(async(req,res)=>{
    // you have to use {user} that you found from the database not the schema one
 
 
-  const isPasswordValid = await user.isPasswordCorrect(password)
+   const isPasswordValid = await user.isPasswordCorrect(password)
 
   if(!isPasswordValid){
    throw new ApiError(401, "Invalid user credentials")
