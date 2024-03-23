@@ -1,5 +1,15 @@
 import {Router} from 'express'
-import { changeCurrentUserPassword, getCurrentUser, logOutUser, loginUser, refreshAccessToken, registerUser, updateAccountDetails, updateUserAvatar, updateUserCoverImg } from '../controllers/user.controller.js';
+import { changeCurrentUserPassword,
+     getCurrentUser,
+      getUserChannelProfile,
+       getWatchHistory, 
+       logOutUser,
+        loginUser,
+         refreshAccessToken,
+          registerUser,
+           updateAccountDetails,
+            updateUserAvatar, 
+            updateUserCoverImg } from '../controllers/user.controller.js';
 import {upload} from '../middlewares/multer.middleware.js'
 import { verifyJwt, verifyJwtForUpdatingUserDetails } from '../middlewares/auth.middleware.js';
 
@@ -25,10 +35,12 @@ router.route("/login").post(loginUser)
 router.route("/logout").post(verifyJwt, logOutUser)
 router.route("/refreshToken").post(refreshAccessToken)
 router.route("/changePassword").post(verifyJwtForUpdatingUserDetails, changeCurrentUserPassword)
-router.route("/getUser").post(verifyJwt, getCurrentUser)
-router.route("/updateAccountDetails").post(verifyJwt, updateAccountDetails)
+router.route("/getUser").get(verifyJwt, getCurrentUser)
+
+router.route("/updateAccount").patch(verifyJwt, updateAccountDetails)
 router.route("/updateDetails").post(verifyJwt, updateAccountDetails)
-router.route("/updateAvatar").post(verifyJwt,
+
+router.route("/updateAvatar").patch(verifyJwt,
     upload.fields( [
         {
             name:"avatar",
@@ -37,7 +49,7 @@ router.route("/updateAvatar").post(verifyJwt,
         }
     ]),updateUserAvatar)
      
-    router.route("/updateCoverImage").post(verifyJwt,
+router.route("/updateCoverImage").patch(verifyJwt,
         upload.fields( [
             {
                 name:"coverImage",
@@ -45,5 +57,8 @@ router.route("/updateAvatar").post(verifyJwt,
     
             }
         ]),updateUserCoverImg)
+
+router.route("/history").get(verifyJwt, getWatchHistory)
+router.route("/c/:username").get(verifyJwt, getUserChannelProfile)
 
 export default router;
