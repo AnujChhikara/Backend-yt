@@ -20,11 +20,11 @@ const videoSchema = new mongoose.Schema({
             required:true
         },
         duration:{
-            type:number, //from any cdn
+            type:Number, //from any cdn
             required:true
         },
         view:{
-            type:number,
+            type:Number,
             default:0
         },
         isPublished:{
