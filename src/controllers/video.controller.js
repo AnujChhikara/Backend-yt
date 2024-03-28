@@ -10,7 +10,41 @@ import {deleteOldImageFromCloudinary, deleteVideoFromCloudinary, uploadOnCloudin
 const getAllVideos = asyncHandler(async (req, res) => {
     
     const { page = 1, limit = 10, query, sortBy, sortType, userId } = req.query
-    //TODO: get all videos based on query, sort, pagination
+    let filters = {};
+
+    //sorting it by video owner
+
+    if (userId) {
+        filters.owner = userId;
+    }
+    
+
+    // Apply search query if provided
+    if (query) {
+        // Example: search by video title or description
+        filters.$or = [
+            { title: { $regex: query, $options: 'i' } },
+            { description: { $regex: query, $options: 'i' } }
+        ];
+    }
+
+    //sorting video like newest vidoes or oldest
+    let sortOptions = {};
+    if (sortBy) {
+        sortOptions[sortBy] = sortType === 'newest' ? -1 : 1;
+    }
+
+    try {
+        // Fetch videos with pagination, filtering, and sorting
+        const videos = await Video.find(filters).sort(sortOptions)
+        .skip((page - 1) * limit)
+        .limit(parseInt(limit));
+
+        return res.status(200).json({ success: true, data: videos });
+    } catch (error) {
+        return res.status(500).json({ success: false, error: 'Server error' });
+    }
+   
 })
 
 const publishAVideo = asyncHandler(async (req, res) => {
@@ -52,6 +86,10 @@ const publishAVideo = asyncHandler(async (req, res) => {
             owner:req.user,
             thumbnail:thumbnail.url
         })
+
+        if(!video){
+            throw new ApiError(401, "failed to upload video")
+        }
 
 
     return res.status(200).json({msg:"Video Published Successfully", data:video})
@@ -111,8 +149,12 @@ const updateVideo = asyncHandler(async (req, res) => {
 
 const deleteVideo = asyncHandler(async (req, res) => {
     const { videoId } = req.params
-    const video = await Video.findById({_id:videoId})
+
     
+    const video = await Video.findById(videoId);
+    if (!video) {
+        return res.status(404).json({ msg: "Video not found" });
+    }
  
     //deleting files from cloudinary
      await deleteVideoFromCloudinary(video.videoFile)
@@ -126,6 +168,20 @@ const deleteVideo = asyncHandler(async (req, res) => {
 
 const togglePublishStatus = asyncHandler(async (req, res) => {
     const { videoId } = req.params
+
+    const video = await Video.findById(videoId);
+    if (!video) {
+        return res.status(404).json({ msg: "Video not found" });
+    }
+
+     // Toggle the isPublished status
+     video.isPublished = !video.isPublished;
+
+     // Save the updated video
+     const updatedVideo = await video.save();
+
+        return res.status(200).json({msg:"publish status toggled successfully", data:updatedVideo})
+
 })
 
 export {
