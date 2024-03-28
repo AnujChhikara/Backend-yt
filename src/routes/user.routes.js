@@ -11,7 +11,7 @@ import { changeCurrentUserPassword,
             updateUserAvatar, 
             updateUserCoverImg } from '../controllers/user.controller.js';
 import {upload} from '../middlewares/multer.middleware.js'
-import { verifyJwt, verifyJwtForUpdatingUserDetails } from '../middlewares/auth.middleware.js';
+import { verifyJWT, verifyJwtForUpdatingUserDetails } from '../middlewares/auth.middleware.js';
 
 const router = Router()
 
@@ -32,15 +32,15 @@ router.route("/register").post(
 router.route("/login").post(loginUser)
 
 //secured Routes
-router.route("/logout").post(verifyJwt, logOutUser)
+router.route("/logout").post(verifyJWT, logOutUser)
 router.route("/refreshToken").post(refreshAccessToken)
 router.route("/changePassword").post(verifyJwtForUpdatingUserDetails, changeCurrentUserPassword)
-router.route("/getUser").get(verifyJwt, getCurrentUser)
+router.route("/getUser").get(verifyJWT, getCurrentUser)
 
-router.route("/updateAccount").patch(verifyJwt, updateAccountDetails)
-router.route("/updateDetails").post(verifyJwt, updateAccountDetails)
+router.route("/updateAccount").patch(verifyJWT, updateAccountDetails)
+router.route("/updateDetails").post(verifyJWT, updateAccountDetails)
 
-router.route("/updateAvatar").patch(verifyJwt,
+router.route("/updateAvatar").patch(verifyJWT,
     upload.fields( [
         {
             name:"avatar",
@@ -49,7 +49,7 @@ router.route("/updateAvatar").patch(verifyJwt,
         }
     ]),updateUserAvatar)
      
-router.route("/updateCoverImage").patch(verifyJwt,
+router.route("/updateCoverImage").patch(verifyJWT,
         upload.fields( [
             {
                 name:"coverImage",
@@ -58,7 +58,7 @@ router.route("/updateCoverImage").patch(verifyJwt,
             }
         ]),updateUserCoverImg)
 
-router.route("/history").get(verifyJwt, getWatchHistory)
-router.route("/c/:username").get(verifyJwt, getUserChannelProfile)
+router.route("/history").get(verifyJWT, getWatchHistory)
+router.route("/c/:username").get(verifyJWT, getUserChannelProfile)
 
 export default router;
