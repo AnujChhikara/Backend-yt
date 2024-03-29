@@ -184,11 +184,31 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
 
 })
 
+const watchedStatus = asyncHandler(async(req,res)=> {
+    const {videoId} = req.params
+
+     await Video.findByIdAndUpdate(videoId, 
+        { $inc: { view: 1 } }, // Increment the views field by 1
+            { new: true } // Return the updated document
+    )
+
+    const watchHistory = await User.findByIdAndUpdate(req.user._id, 
+        {$push: {watchHistory: videoId}},
+        {new:true})
+
+        if(!watchHistory){
+            return res.status(400).json({msg:"failed to add video into watchHistory"})
+        }
+
+        return res.status(200).json({msg:"video added to the watch history"})
+})
+
 export {
     getAllVideos,
     publishAVideo,
     getVideoById,
     updateVideo,
     deleteVideo,
-    togglePublishStatus
+    togglePublishStatus,
+    watchedStatus
 }
