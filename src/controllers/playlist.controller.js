@@ -1,7 +1,5 @@
 import mongoose, {isValidObjectId} from "mongoose"
 import {Playlist} from "../models/playlist.models.js"
-import {ApiError} from "../utils/ApiError.js"
-import {ApiResponse} from "../utils/ApiResponse.js"
 import {asyncHandler} from "../utils/asyncHandler.js"
 import { Video } from "../models/video.models.js"
 
@@ -71,8 +69,6 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
 
     return res.status(200).json({msg:"Video added to playlist successfully", data:addVideo})
 })
-
-  
 
 const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
     const {playlistId, videoId} = req.params
