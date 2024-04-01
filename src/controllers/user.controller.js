@@ -46,7 +46,8 @@ const registerUser = asyncHandler(async (req,res) => {
         [fullName,email,username,password].some((field)=> 
         field?.trim() === "")
     ){
-        throw new ApiError(400, "All fields are required")
+      return res.status(400).json({msg: "All fields are required"})
+    
     }
 
 
@@ -56,7 +57,7 @@ const registerUser = asyncHandler(async (req,res) => {
    })
 
    if (existedUser) {
-    throw new ApiError(409, "user already exits")
+    return res.status(409).json({msg: "user already exits"})
     
    }
 
@@ -135,7 +136,8 @@ const loginUser = asyncHandler(async(req,res)=>{
 
    //checking if user not entered email and username both
    if(!email && !username){
-      throw new ApiError(400, "username or email is required")
+      return res.status(400).json({msg: "username or email is required"})
+      
    }
     
    //finding user by email or username whichever available 
@@ -145,7 +147,7 @@ const loginUser = asyncHandler(async(req,res)=>{
     
    //checking if we found user in database
    if(!user){
-      throw new ApiError(404, "user doesn't exist")
+      return res.status(404).json({msg: "User does not exist!"})
    }
 
    //if user found then verify its password with hashed password 
@@ -156,7 +158,8 @@ const loginUser = asyncHandler(async(req,res)=>{
    const isPasswordValid = await user.isPasswordCorrect(password)
 
   if(!isPasswordValid){
-   throw new ApiError(401, "Invalid user credentials")
+   return res.status(401).json({msg: "Invalid user credentials"})
+   
 }
 
    //generating refresh and access Token
