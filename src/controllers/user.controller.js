@@ -147,7 +147,7 @@ const loginUser = asyncHandler(async(req,res)=>{
     
    //checking if we found user in database
    if(!user){
-      return res.status(404).json({msg: "User does not exist!"})
+      return res.status(404).json({msg:"user does not exist!"})
    }
 
    //if user found then verify its password with hashed password 
@@ -158,8 +158,7 @@ const loginUser = asyncHandler(async(req,res)=>{
    const isPasswordValid = await user.isPasswordCorrect(password)
 
   if(!isPasswordValid){
-   return res.status(401).json({msg: "Invalid user credentials"})
-   
+   return res.status(401).json({msg:"Invalid user credentials!"})
 }
 
    //generating refresh and access Token
