@@ -32,7 +32,7 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
         }
 
     } catch (error) {
-        console.error(error);
+        
         res.status(500).json({ msg: "Server Error" });
         
     }   

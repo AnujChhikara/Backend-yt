@@ -5,7 +5,7 @@ import {Like} from "../models/like.models.js"
 import {asyncHandler} from "../utils/asyncHandler.js"
 
 const getChannelStats = asyncHandler(async (req, res) => {
-    const {channelId} = req.body
+    const {channelId} = req.params
 
     let data = {}
     data.channelId =channelId
