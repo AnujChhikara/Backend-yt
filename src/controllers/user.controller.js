@@ -269,19 +269,19 @@ const refreshAccessToken = asyncHandler(async(req,res)=>{
 
 //changing user password
 const changeCurrentUserPassword = asyncHandler(async(req,res)=> {
-
+   const user = req.user
    const {oldPassword, newPassword} = req.body
 
    if(!oldPassword && !newPassword){
-      throw new ApiError(401, "All fields are required")
+      return res.status(401).json({msg: "All fields are required"})
    }
 
-   const user = req.user
+   
 
    const ispassowordCorrect = await user.isPasswordCorrect(oldPassword)
 
    if(!ispassowordCorrect){
-      throw new ApiError(400, "Invalid old Password")
+      return res.status(400).json({msg: "Invalid old Password"})
    }
      
    user.password = newPassword
@@ -321,7 +321,7 @@ const updateUserAvatar = asyncHandler(async(req,res)=>{
    const avatarLocalPath = req.files?.avatar[0].path
    
    if(!avatarLocalPath){
-      throw new ApiError(400, "avatar file is missing")
+      return res.status(400).json({msg:"avatar file is missing"})
    }
 
   const NewAvatar = await uploadOnCloudinary(avatarLocalPath)

@@ -37,8 +37,8 @@ router.route("/refreshToken").post(refreshAccessToken)
 router.route("/changePassword").post(verifyJwtForUpdatingUserDetails, changeCurrentUserPassword)
 router.route("/getUser").get(verifyJWT, getCurrentUser)
 
-router.route("/updateAccount").patch(verifyJWT, updateAccountDetails)
-router.route("/updateDetails").post(verifyJWT, updateAccountDetails)
+
+router.route("/updateDetails").patch(verifyJWT, updateAccountDetails)
 
 router.route("/updateAvatar").patch(verifyJWT,
     upload.fields( [
