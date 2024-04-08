@@ -66,9 +66,22 @@ const deleteTweet = asyncHandler(async (req, res) => {
     
 })
 
+const getAllTweets = asyncHandler(async (req, res) => {
+   
+
+        const tweets = await Tweet.find()
+        if(!tweets){
+            return res.status(500).json({ success: false, error: 'Server error' });}
+
+
+         return res.status(200).json({ success: true, data: tweets});
+ 
+})
+
 export {
     createTweet,
     getUserTweets,
     updateTweet,
-    deleteTweet
+    deleteTweet,
+    getAllTweets
 }
