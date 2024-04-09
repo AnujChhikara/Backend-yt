@@ -64,7 +64,20 @@ const getChannelVideos = asyncHandler(async (req, res) => {
     res.status(200).json({msg:"Videos of this channel fetched successfully", data:videos})
 })
 
+const getAllVideos = asyncHandler(async(req,res) => {
+    const videos = await Video.find({
+        isPublished: true
+    })
+    if(!videos){
+        return res.status(404).json({msg:"Videos can not be found",})
+    }
+    res.status(200).json({msg:"Videos has been fetched successfully", data:videos})
+
+})
+
 export {
     getChannelStats, 
-    getChannelVideos
-    }
+    getChannelVideos,
+    getAllVideos
+   
+}

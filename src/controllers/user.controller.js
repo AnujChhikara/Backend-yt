@@ -501,7 +501,16 @@ const getWatchHistory  = asyncHandler(async(req,res) =>{
       return res.status(200).json(new ApiResponse(200, user[0].watchHistory, "user watch history fetch successfully"))
 })
 
+const getUserById = asyncHandler(async(req,res) => {
+   const {userId} = req.params
 
+   const user  = await User.findById(userId)
+   if(!user) {
+      return res.status(404).json({msg:'No User found'})
+   }
+
+   return res.status(200).json(user)
+})
 export {registerUser,
     loginUser, 
     logOutUser, 
@@ -512,4 +521,4 @@ export {registerUser,
     updateUserAvatar,
     updateUserCoverImg,
     getUserChannelProfile,
-    getWatchHistory}
+    getWatchHistory, getUserById}

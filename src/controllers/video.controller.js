@@ -188,7 +188,7 @@ const watchedStatus = asyncHandler(async(req,res)=> {
     const {videoId} = req.params
 
      await Video.findByIdAndUpdate(videoId, 
-        { $inc: { view: 1 } }, // Increment the views field by 1
+        { $inc: { view: 1} }, // Increment the views field by 1
             { new: true } // Return the updated document
     )
 
