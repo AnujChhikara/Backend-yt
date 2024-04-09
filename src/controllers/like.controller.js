@@ -114,7 +114,6 @@ const toggleTweetLike = asyncHandler(async (req, res) => {
 )
 
 const getLikedVideos = asyncHandler(async (req, res) => {
-    const {videoId} = req.params
     const userId = req.user._id
 
     const likedVideos = await Like.aggregate([
@@ -135,9 +134,39 @@ const getLikedVideos = asyncHandler(async (req, res) => {
    return res.status(200).json({data: likedVideoArray})
 })
 
+
+const checkIfAlreadyLiked = asyncHandler(async (req,res)=>{
+
+    const {Id} = req.params
+    const userId = req.user._id
+
+    
+
+          try {
+              // Query to find if the user has liked a tweet
+            const tweetLike =await  Like.findOne({ likedBy:userId, tweet: Id})
+  
+              // Query to find if the user has liked a video
+             const videoLike = await Like.findOne({ likedBy:userId, video: Id })
+         
+             const hasLiked = tweetLike || videoLike;
+             if(hasLiked) {
+              return res.status(200).json({msg:true})
+             }
+  
+             return res.status(400).json({msg:false})
+          } catch (error) {
+            
+            return res.status(400).json({msg:false})
+
+          }
+
+     
+})
 export {
     toggleCommentLike,
     toggleTweetLike,
     toggleVideoLike,
-    getLikedVideos
+    getLikedVideos,
+    checkIfAlreadyLiked
 }
