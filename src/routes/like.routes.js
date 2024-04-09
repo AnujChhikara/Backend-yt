@@ -4,7 +4,9 @@ import {
     toggleCommentLike,
     toggleVideoLike,
     toggleTweetLike,
-    checkIfAlreadyLiked,
+    checkIfVideoAlreadyLiked,
+    checkIfTweetAlreadyLiked,
+    
 } from "../controllers/like.controller.js"
 import {verifyJWT} from "../middlewares/auth.middleware.js"
 
@@ -15,6 +17,7 @@ router.route("/toggle/v/:videoId").post(toggleVideoLike);
 router.route("/toggle/c/:commentId").post(toggleCommentLike);
 router.route("/toggle/t/:tweetId").post(toggleTweetLike);
 router.route("/videos").get(getLikedVideos);
-router.route("/isLiked/:Id").get(checkIfAlreadyLiked);
+router.route("/isLiked/v/:Id").get(checkIfVideoAlreadyLiked);
+router.route("/isLiked/t/:Id").get(checkIfTweetAlreadyLiked);
 
 export default router

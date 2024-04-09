@@ -135,38 +135,48 @@ const getLikedVideos = asyncHandler(async (req, res) => {
 })
 
 
-const checkIfAlreadyLiked = asyncHandler(async (req,res)=>{
-
+const checkIfVideoAlreadyLiked = asyncHandler(async (req,res)=>{
     const {Id} = req.params
     const userId = req.user._id
-
-    
-
-          try {
-              // Query to find if the user has liked a tweet
-            const tweetLike =await  Like.findOne({ likedBy:userId, tweet: Id})
-  
-              // Query to find if the user has liked a video
-             const videoLike = await Like.findOne({ likedBy:userId, video: Id })
+          
+         // Query to find if the user has liked a video
+   const videoLike = await Like.findOne({ likedBy:userId, video: Id })
          
-             const hasLiked = tweetLike || videoLike;
-             if(hasLiked) {
-              return res.status(200).json({msg:true})
-             }
-  
-             return res.status(400).json({msg:false})
-          } catch (error) {
-            
-            return res.status(400).json({msg:false})
+             
+     if(!videoLike) {
+      return res.status(400).json({msg:false})
+     }
 
-          }
+     const responseData = {
+        liked: !!videoLike, // Convert videoLike to a boolean value
+        msg: !!videoLike ? 'Video already liked' : 'Video not liked'
+    };
 
      
+     return res.status(200).json(responseData)
+  
 })
+const checkIfTweetAlreadyLiked = asyncHandler(async (req,res)=>{
+    const {Id} = req.params
+    const userId = req.user._id
+          
+         // Query to find if the user has liked a video
+   const videoLike = await Like.findOne({ likedBy:userId, tweet: Id })
+         
+             
+     if(!videoLike) {
+      return res.status(400).json({msg:false})
+     }
+     
+ return res.status(200).json({msg:true})
+  
+})
+
 export {
     toggleCommentLike,
     toggleTweetLike,
     toggleVideoLike,
     getLikedVideos,
-    checkIfAlreadyLiked
+    checkIfVideoAlreadyLiked, 
+    checkIfTweetAlreadyLiked
 }
