@@ -142,10 +142,7 @@ const checkIfVideoAlreadyLiked = asyncHandler(async (req,res)=>{
          // Query to find if the user has liked a video
    const videoLike = await Like.findOne({ likedBy:userId, video: Id })
          
-             
-     if(!videoLike) {
-      return res.status(400).json({msg:false})
-     }
+            
 
      const responseData = {
         liked: !!videoLike, // Convert videoLike to a boolean value
