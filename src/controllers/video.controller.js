@@ -49,7 +49,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
 
 const publishAVideo = asyncHandler(async (req, res) => {
 
-    const { title, description} = req.body
+    const { title, description, category} = req.body
 
     const videoLocalPath = req.files?.video[0]?.path
 
@@ -84,7 +84,8 @@ const publishAVideo = asyncHandler(async (req, res) => {
             duration: videoFile.duration,
             isPublished:true,
             owner:req.user,
-            thumbnail:thumbnail.url
+            thumbnail:thumbnail.url,
+            category
         })
 
         if(!video){
