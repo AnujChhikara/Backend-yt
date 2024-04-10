@@ -66,8 +66,32 @@ const getSubscribedChannels = asyncHandler(async (req, res) => {
 
 })
 
+const checkIfSubscribed = asyncHandler(async (req, res) => {
+
+
+    const { channelId } = req.params
+    const user = req.user
+
+    const isSubscribed = await Subscription.findOne({
+          channel:channelId,
+          subscriber:user._id
+    })
+    
+    const responseData = {
+        subscribed: !!isSubscribed, 
+        msg: !!isSubscribed ? 'channel already subscribed' : 'channel not subscribed'
+    };
+
+     
+     return res.status(200).json(responseData)
+
+})
+
+
+
 export {
     toggleSubscription,
     getChannelTotalSubscribers,
-    getSubscribedChannels
+    getSubscribedChannels,
+    checkIfSubscribed
 }

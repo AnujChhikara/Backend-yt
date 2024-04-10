@@ -158,14 +158,16 @@ const checkIfTweetAlreadyLiked = asyncHandler(async (req,res)=>{
     const userId = req.user._id
           
          // Query to find if the user has liked a video
-   const videoLike = await Like.findOne({ likedBy:userId, tweet: Id })
+   const tweetLike = await Like.findOne({ likedBy:userId, tweet: Id })
          
-             
-     if(!videoLike) {
-      return res.status(400).json({msg:false})
-     }
-     
- return res.status(200).json({msg:true})
+   const responseData = {
+    liked: !!tweetLike, 
+    msg: !!tweetLike ? 'Video already liked' : 'Video not liked'
+};
+
+ 
+ return res.status(200).json(responseData)
+    
   
 })
 
