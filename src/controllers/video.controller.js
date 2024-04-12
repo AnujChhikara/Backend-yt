@@ -1,8 +1,6 @@
-import mongoose, {isValidObjectId} from "mongoose"
 import {Video} from "../models/video.models.js"
 import {User} from "../models/user.models.js"
 import {ApiError} from "../utils/ApiError.js"
-import {ApiResponse} from "../utils/ApiResponse.js"
 import {asyncHandler} from "../utils/asyncHandler.js"
 import {deleteOldImageFromCloudinary, deleteVideoFromCloudinary, uploadOnCloudinary} from "../utils/cloudinary.js"
 
@@ -148,6 +146,7 @@ const updateVideo = asyncHandler(async (req, res) => {
 
 })
 
+
 const deleteVideo = asyncHandler(async (req, res) => {
     const { videoId } = req.params
 
@@ -194,7 +193,7 @@ const watchedStatus = asyncHandler(async(req,res)=> {
     )
 
     const watchHistory = await User.findByIdAndUpdate(req.user._id, 
-        {$push: {watchHistory: videoId}},
+        {$addToSet: {watchHistory: videoId}},
         {new:true})
 
         if(!watchHistory){
@@ -211,5 +210,5 @@ export {
     updateVideo,
     deleteVideo,
     togglePublishStatus,
-    watchedStatus
+    watchedStatus, 
 }

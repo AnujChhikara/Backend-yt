@@ -134,6 +134,28 @@ const getLikedVideos = asyncHandler(async (req, res) => {
    return res.status(200).json({data: likedVideoArray})
 })
 
+const getLikedTweets = asyncHandler(async (req, res) => {
+    const userId = req.user._id
+
+    const likedTweet = await Like.aggregate([
+        {$match: {
+            likedBy:userId
+        }},
+        {$lookup:{
+            from: "tweets",
+               localField: "tweet",
+               foreignField: "_id",
+               as: "LikedTweet"
+        }}
+    ])
+
+    const filteredLikedTweets = likedTweet.filter(likedTweet => likedTweet.LikedTweet.length > 0); 
+    const likedTweetArray = filteredLikedTweets.map((tweet)=> tweet.LikedTweet)
+
+   return res.status(200).json({data: likedTweetArray})
+})
+
+
 
 const checkIfVideoAlreadyLiked = asyncHandler(async (req,res)=>{
     const {Id} = req.params
@@ -177,5 +199,6 @@ export {
     toggleVideoLike,
     getLikedVideos,
     checkIfVideoAlreadyLiked, 
-    checkIfTweetAlreadyLiked
+    checkIfTweetAlreadyLiked,
+    getLikedTweets
 }

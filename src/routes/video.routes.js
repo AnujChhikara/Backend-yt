@@ -39,7 +39,6 @@ router
     .patch(upload.single("thumbnail"), updateVideo);
 
 router.route("/toggle/publish/:videoId").patch(togglePublishStatus);
-
 router.route("/watchHistory/:videoId").patch(watchedStatus)
 
 export default router

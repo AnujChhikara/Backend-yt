@@ -4,7 +4,6 @@ import {User} from '../models/user.models.js'
 import { deleteOldImageFromCloudinary, uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken"
-import mongoose from "mongoose";
 
 
 //function fro generating access and refresh token
