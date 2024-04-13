@@ -184,7 +184,25 @@ const checkIfTweetAlreadyLiked = asyncHandler(async (req,res)=>{
          
    const responseData = {
     liked: !!tweetLike, 
-    msg: !!tweetLike ? 'Video already liked' : 'Video not liked'
+    msg: !!tweetLike ? 'Tweet already liked' : 'Tweet not liked'
+};
+
+ 
+ return res.status(200).json(responseData)
+    
+  
+})
+
+const checkIfCommentAlreadyLiked = asyncHandler(async (req,res)=>{
+    const {Id} = req.params
+    const userId = req.user._id
+          
+         // Query to find if the user has liked a video
+   const commentLike = await Like.findOne({ likedBy:userId, comment: Id })
+         
+   const responseData = {
+    liked: !!commentLike, 
+    msg: !!commentLike ? 'Comment already liked' : 'Comment not liked'
 };
 
  
@@ -200,5 +218,6 @@ export {
     getLikedVideos,
     checkIfVideoAlreadyLiked, 
     checkIfTweetAlreadyLiked,
-    getLikedTweets
+    getLikedTweets,
+    checkIfCommentAlreadyLiked
 }
