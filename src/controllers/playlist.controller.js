@@ -93,7 +93,7 @@ const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
         return res.status(404).json({msg:"Can't found video with this videoId"})
     }
     const removedVideo = await Playlist.findByIdAndUpdate(playlistId, 
-        { $pull: { videos: videoId } }, // Use $push to add the videoId to the videos array
+        { $pull: { videos:{ video: videoId } } }, // Use $push to add the videoId to the videos array
         { new: true } // To return the updated playlist after the update
     ) 
     if(!removedVideo){
