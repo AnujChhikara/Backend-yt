@@ -5,7 +5,7 @@ import { Video } from "../models/video.models.js"
 
 
 const createPlaylist = asyncHandler(async (req, res) => {
-    const {name, description} = req.body
+    const {name, description, category} = req.body
 
     if(!name || !description){
         return res.status(401).json({msg: "Please fill all the fields"})
@@ -14,6 +14,7 @@ const createPlaylist = asyncHandler(async (req, res) => {
     const playlist = await Playlist.create({
         name,
         description,
+        category,
         owner:req.user._id
     })
 
@@ -59,8 +60,22 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
     if(!video){
         return res.status(404).json({msg:"Can't found video with this videoId"})
     }
+    // Check if the video is already in the playlist
+    const playlist = await Playlist.findById(playlistId);
+    if (!playlist) {
+        return res.status(404).json({ msg: "Can't find playlist with this playlistId" });
+    }
+    const existingVideoIndex = playlist.videos.findIndex(v => v.video.toString() === videoId);
+    if (existingVideoIndex !== -1) {
+        return res.status(400).json({ msg: "Video already exists in the playlist" });
+    }
+    
+    const videoData = {
+        video: videoId,
+        thumbnail: video.thumbnail
+    }
     const addVideo = await Playlist.findByIdAndUpdate(playlistId, 
-        { $push: { videos: videoId } }, // Use $push to add the videoId to the videos array
+        { $addToSet: { videos:videoData} }, // Use $push to add the videoId to the videos array
         { new: true } // To return the updated playlist after the update
     ) 
     if(!addVideo){

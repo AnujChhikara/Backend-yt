@@ -9,10 +9,18 @@ const playlistSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    videos: [
+    category:{
+        type:String,
+        required:true
+    },
+    videos:[
         {
-            type:mongoose.Schema.Types.ObjectId,
-            ref:"Video"
+            video: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Video"
+            },
+            // Add a thumbnail field for each video reference
+            thumbnail: String
         }
     ],
     owner:{

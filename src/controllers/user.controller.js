@@ -84,7 +84,6 @@ const registerUser = asyncHandler(async (req,res) => {
     const avatar = await uploadOnCloudinary(avatarLocalPath)
     const coverImage = await uploadOnCloudinary(coverImageLocalPath)
 
-
  //checking if avatar field successfully uploaded
 
     if (!avatar) {
