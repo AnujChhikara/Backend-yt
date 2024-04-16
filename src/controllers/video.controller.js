@@ -48,6 +48,10 @@ const getAllVideos = asyncHandler(async (req, res) => {
 const publishAVideo = asyncHandler(async (req, res) => {
 
     const { title, description, category} = req.body
+    
+    if (!title || !description || !category) {
+        return res.status(400).json({ msg: "Please provide all required fields." });
+    }
 
     const videoLocalPath = req.files?.video[0]?.path
 
